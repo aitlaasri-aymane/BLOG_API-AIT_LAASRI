@@ -1,13 +1,310 @@
 <html>
 
 <head>
-  <title>Express</title>
-  <link rel="stylesheet" href="/stylesheets/style.css">
+  <title>API TP</title>
+  <link rel="stylesheet" href="./stylesheets/style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
+
+
+
 <body>
-  <h1>Express</h1>
-  <p>Welcome to Express</p>
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand mb-0 h1"><i class="fas fa-cog"></i> API</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#"><i class="fas fa-home"></i> Home</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false"><i class="fas fa-address-book"></i> Browse
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="#">Users</a></li>
+              <li><a class="dropdown-item" href="#">Staff</a></li>
+            </ul>
+          </li>
+        </ul>
+        <ul class="navbar-nav mb-2 ms-auto mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="#"><i class="fas fa-user"></i> Sign Up</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link float-" href="#"><i class="fas fa-sign-in-alt"></i> Log In</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+
+
+
+  <div class="card text-center mt-5">
+    </nav>
+    <div class="card-header" role="cardlist">
+      <ul class="nav nav-tabs card-header-tabs">
+        <li class="nav-item">
+          <a class="nav-link active" id="searchtab" data-bs-toggle="tab" data-bs-target="#searchbody" type="button"
+            role="tab" aria-controls="searchbody" aria-selected="true" href="#">Search</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="deletetab" data-bs-toggle="tab" data-bs-target="#deletebody" type="button" role="tab"
+            aria-controls="deletebody" aria-selected="false" href="#">Delete user</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="updatetab" data-bs-toggle="tab" data-bs-target="#updatebody" type="button" role="tab"
+            aria-controls="updatebody" aria-selected="false" href="#">Update User</a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="tab-content" id="nav-tabContent">
+      <div align="center" class="tab-pane fade show active p-3" id="searchbody" role="tabpanel"
+        aria-labelledby="searchtab">
+        <h5 class="card-title">Search by ID</h5>
+        <input type="number" class="form-control my-3 w-25" id="inputsearchid" placeholder="Enter ID">
+        <a href="#" class="btn btn-primary" onclick="getUser()">Search <i class="fas fa-search"></i></a>
+
+        <div id="data1">
+        </div>
+
+        <hr>
+        <h5 class="card-title">Search by Email</h5>
+        <input type="email" class="form-control my-3 w-50" id="inputsearchemail" placeholder="Enter Email">
+        <a href="#" class="btn btn-primary" onclick="getUserByEmail()">Search <i class="fas fa-search"></i></a>
+
+        <div id="data2">
+        </div>
+
+      </div>
+      <div align="center" class="tab-pane fade p-3" id="deletebody" role="tabpanel" aria-labelledby="deletetab">
+        <h5 class="card-title">Delete user by ID</h5>
+        <input type="number" class="form-control my-3 w-25" id="inputdeleteid" placeholder="Enter ID">
+        <a href="#" class="btn btn-primary col" id="deluser-searchbut" onclick="getUser1()">Search <i
+            class="fas fa-search"></i></a>
+        <a href="#" class="btn btn-danger disabled" id="deluser-delbut" onclick="deleteUser()">Delete <i
+            class="fas fa-trash-alt"></i></a>
+        <a href="#" class="btn btn-warning disabled" id="deluser-cancelsearch" onclick="cancelsearch()">Cancel
+          <i class="fas fa-ban"></i></a>
+
+        <div id="data3">
+        </div>
+
+      </div>
+      <div class="tab-pane fade p-3" id="updatebody" role="tabpanel" aria-labelledby="updatetab">
+        <h5 class="card-title">Update user by ID</h5>
+        <div class="row align-items-lg-center">
+          <div class="col">
+            <div align="right" class="form-group">
+              <input type="number" class="form-control my-3 w-50 col" id="inputupdateid" placeholder="Enter ID">
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-4 align-self-center">
+            <div class="form-group" align="left">
+              <a href="#" class="btn btn-primary col" id="upuser-searchbut" onclick="getUser2()">Search <i
+                  class="fas fa-search"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="container">
+          <div class="row align-items-lg-center g-4">
+            <div class="col-6">
+              <input type="email" class="form-control" id="inputupdateemail" placeholder="Enter Email" readonly>
+            </div>
+            <div class="col-6">
+              <input type="text" class="form-control" id="inputupdateusername" placeholder="Enter UserName" readonly>
+            </div>
+            <div class="col-6">
+              <input type="password" class="form-control" id="inputupdatepassword" placeholder="Enter Password"
+                readonly>
+            </div>
+            <div class="col-6">
+              <select id="inputupdaterole" class="form-select" disabled>
+                <option value="" selected>Choose Role</option>
+                <option id="admin" value="admin">Admin</option>
+                <option id="guest" value="guest">Guest</option>
+                <option id="author" value="author">Author</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <a href="#" class="btn btn-success mt-3 disabled" id="upuser-updatebut" onclick="updateUser()">Update <i
+            class="fas fa-edit"></i></a>
+        <a href="#" class="btn btn-warning mt-3 disabled" id="upuser-cancelsearch" onclick="cancelsearch1()">Cancel
+          <i class="fas fa-ban"></i></a>
+
+        <div id="data4"></div>
+
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
 </body>
+
+<script>
+  const URL = 'http://localhost:3000/users/';
+  async function getUser() {
+    let id = document.querySelector("#inputsearchid").value
+    try {
+      if (id) {
+        let response = await fetch(`${URL}searchbyid/${id}`);
+        let data = await response.text();
+        document.getElementById('data1').innerHTML = '<table align="center" class="table table-striped table-hover mt-3"><thead><tr><th scope="col">#</th><th scope="col">username</th><th scope="col">email</th><th scope="col">role</th></tr></thead><tbody><tr><td>' + data.split(',')[0].split(':')[1] + '</td><td>' + data.split(',')[1].split(':')[1].split('"')[1].split('"')[0] + '</td><td>' + data.split(',')[2].split(':')[1].split('"')[1].split('"')[0] + '</td><td>' + data.split(',')[4].split(':')[1].split('"')[1].split('"')[0] + '</td></tr></tbody></table>'
+        return;
+      } else {
+        document.getElementById('data1').innerHTML = '<div class="alert alert-warning mt-3" role="alert"><i class="fas fa-exclamation-triangle fa-2x" style=" vertical-align: middle;"></i> Please specify the ID</div>'
+      }
+    }
+    catch (err) {
+      document.getElementById('data1').innerHTML = '<div class="alert alert-danger mt-3" role="alert"><i class="fas fa-exclamation-triangle fa-2x" style=" vertical-align: middle;"></i> The ID does\'t exist</div>'
+    }
+  }
+
+  async function getUserByEmail() {
+    let email = document.querySelector("#inputsearchemail").value
+    try {
+      if (document.getElementById("inputsearchemail").value != "") {
+        let response = await fetch(`${URL}searchbyemail/${email}`);
+        let data = await response.text();
+        document.getElementById('data2').innerHTML = '<table align="center" class="table table-striped table-hover mt-3"><thead><tr><th scope="col">#</th><th scope="col">username</th><th scope="col">email</th><th scope="col">role</th></tr></thead><tbody><tr><td>' + data.split(',')[0].split(':')[1] + '</td><td>' + data.split(',')[1].split(':')[1].split('"')[1].split('"')[0] + '</td><td>' + data.split(',')[2].split(':')[1].split('"')[1].split('"')[0] + '</td><td>' + data.split(',')[4].split(':')[1].split('"')[1].split('"')[0] + '</td></tr></tbody></table>'
+        return;
+      } else {
+        document.getElementById('data2').innerHTML = '<div class="alert alert-warning mt-3" role="alert"><i class="fas fa-exclamation-triangle fa-2x" style=" vertical-align: middle;"></i> Please specify the Email</div>'
+      }
+    }
+    catch (err) {
+      document.getElementById('data2').innerHTML = '<div class="alert alert-danger mt-3" role="alert"><i class="fas fa-exclamation-triangle fa-2x" style=" vertical-align: middle;"></i> The Email does\'t exist</div>'
+    }
+  }
+
+  async function getUser1() {
+    let id = document.querySelector("#inputdeleteid").value
+    try {
+      if (id) {
+        let response = await fetch(`${URL}searchbyid/${id}`);
+        let data = await response.text();
+        document.getElementById('data3').innerHTML = '<table align="center" class="table table-striped table-hover mt-3"><thead><tr><th scope="col">#</th><th scope="col">username</th><th scope="col">email</th><th scope="col">role</th></tr></thead><tbody><tr><td>' + data.split(',')[0].split(':')[1] + '</td><td>' + data.split(',')[1].split(':')[1].split('"')[1].split('"')[0] + '</td><td>' + data.split(',')[2].split(':')[1].split('"')[1].split('"')[0] + '</td><td>' + data.split(',')[4].split(':')[1].split('"')[1].split('"')[0] + '</td></tr></tbody></table>'
+        document.getElementById('deluser-delbut').classList.remove("disabled")
+        document.getElementById('inputdeleteid').readOnly = true
+        document.getElementById('deluser-cancelsearch').classList.remove("disabled")
+        if (document.getElementById('deluser-searchbut').classList.contains("disabled") == false) { document.getElementById('deluser-searchbut').classList.add("disabled") }
+        return;
+      } else {
+        document.getElementById('data3').innerHTML = '<div class="alert alert-warning mt-3" role="alert"><i class="fas fa-exclamation-triangle fa-2x" style=" vertical-align: middle;"></i> Please specify the ID</div>'
+      }
+    }
+    catch (err) {
+      document.getElementById('data3').innerHTML = '<div class="alert alert-danger mt-3" role="alert"><i class="fas fa-exclamation-triangle fa-2x" style=" vertical-align: middle;"></i> The ID does\'t exist</div>'
+    }
+  }
+
+  function cancelsearch() {
+    document.getElementById('inputdeleteid').readOnly = false
+    if (document.getElementById('deluser-delbut').classList.contains("disabled") == false) { document.getElementById('deluser-delbut').classList.add("disabled") }
+    if (document.getElementById('deluser-cancelsearch').classList.contains("disabled") == false) { document.getElementById('deluser-cancelsearch').classList.add("disabled") }
+    document.getElementById('data3').innerHTML = ''
+    document.getElementById("inputdeleteid").value = ""
+    document.getElementById('deluser-searchbut').classList.remove("disabled")
+  }
+
+  async function deleteUser() {
+    let id = document.querySelector("#inputdeleteid").value
+    fetch(`${URL}deletebyid/${id}`, {
+      method: "DELETE",
+    })
+      .catch(err => console.log(err));
+    document.getElementById('data3').innerHTML = '<div class="alert alert-success mt-3" role="alert"><i class="fas fa-check-circle fa-2x" style=" vertical-align: middle;"></i> The User has been seccussefuly Deleted</div>'
+    if (document.getElementById('deluser-delbut').classList.contains("disabled") == false) { document.getElementById('deluser-delbut').classList.add("disabled") }
+    if (document.getElementById('deluser-cancelsearch').classList.contains("disabled") == false) { document.getElementById('deluser-cancelsearch').classList.add("disabled") }
+    document.getElementById('deluser-searchbut').classList.remove("disabled")
+    document.getElementById("inputdeleteid").value = ""
+    document.getElementById('inputdeleteid').readOnly = false
+  }
+
+  async function getUser2() {
+    let id = document.querySelector("#inputupdateid").value
+    try {
+      if (id) {
+        let response = await fetch(`${URL}searchbyid/${id}`);
+        let data = await response.text();
+        document.getElementById('inputupdateemail').value = data.split(',')[2].split(':')[1].split('"')[1].split('"')[0]
+        document.getElementById('inputupdateusername').value = data.split(',')[1].split(':')[1].split('"')[1].split('"')[0]
+        document.getElementById('inputupdatepassword').value = data.split(',')[3].split(':')[1].split('"')[1].split('"')[0]
+        document.getElementById('inputupdaterole').value = data.split(',')[4].split(':')[1].split('"')[1].split('"')[0]
+        document.getElementById('upuser-updatebut').classList.remove("disabled")
+        document.getElementById('upuser-cancelsearch').classList.remove("disabled")
+        document.getElementById('inputupdateid').readOnly = true
+        document.getElementById('inputupdateemail').readOnly = false
+        document.getElementById('inputupdateusername').readOnly = false
+        document.getElementById('inputupdatepassword').readOnly = false
+        document.getElementById('inputupdaterole').removeAttribute("disabled")
+        if (document.getElementById('upuser-searchbut').classList.contains("disabled") == false) { document.getElementById('upuser-searchbut').classList.add("disabled") }
+        document.getElementById('data4').innerHTML = ''
+        return;
+      } else {
+        document.getElementById('data4').innerHTML = '<div class="alert alert-warning mt-3" role="alert"><i class="fas fa-exclamation-triangle fa-2x" style=" vertical-align: middle;"></i> Please specify the ID</div>'
+      }
+    }
+    catch (err) {
+      document.getElementById('data4').innerHTML = '<div class="alert alert-danger mt-3" role="alert"><i class="fas fa-exclamation-triangle fa-2x" style=" vertical-align: middle;"></i> The ID does\'t exist</div>'
+    }
+  }
+
+  function cancelsearch1() {
+    document.getElementById('inputupdateid').readOnly = false
+    document.getElementById('inputupdateemail').readOnly = true
+    document.getElementById('inputupdateusername').readOnly = true
+    document.getElementById('inputupdatepassword').readOnly = true
+    document.getElementById('inputupdaterole').setAttribute("disabled", "")
+    document.getElementById('inputupdateid').value = document.getElementById('inputupdateemail').value = document.getElementById('inputupdateusername').value = document.getElementById('inputupdatepassword').value = document.getElementById('inputupdaterole').value = ""
+    if (document.getElementById('upuser-updatebut').classList.contains("disabled") == false) { document.getElementById('upuser-updatebut').classList.add("disabled") }
+    if (document.getElementById('upuser-cancelsearch').classList.contains("disabled") == false) { document.getElementById('upuser-cancelsearch').classList.add("disabled") }
+    document.getElementById('upuser-searchbut').classList.remove("disabled")
+  }
+
+  async function updateUser() {
+    const data = {}
+    data.id = document.querySelector("#inputupdateid").value
+    data.username = document.querySelector("#inputupdateusername").value
+    data.email = document.querySelector("#inputupdateemail").value
+    data.password = document.querySelector("#inputupdatepassword").value
+    data.role = document.querySelector("#inputupdaterole").value
+    fetch(URL, {
+      method: "PUT",
+      body: JSON.stringify(data),
+      headers: { "Content-type": "application/json; charset=UTF-8" }
+    })
+      .catch(err => console.log(err));
+    cancelsearch1()
+    document.getElementById('data4').innerHTML = '<div class="alert alert-success mt-3" role="alert"><span class="fas fa-check-circle fa-2x" style=" vertical-align: middle;"></span><span> The User has been seccussefuly Updated</span></div>'
+  }
+
+</script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"
+  integrity="sha512-RXf+QSDCUQs5uwRKaDoXt55jygZZm2V++WUZduaU/Ui/9EGp3f/2KZVahFZBKGH0s774sd3HmrhUy+SgOFQLVQ=="
+  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 </html>
