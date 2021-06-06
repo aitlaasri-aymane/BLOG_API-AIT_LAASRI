@@ -8,6 +8,10 @@ router.get('/', async function (req, res, next) {
   res.send(await usersRepo.getAllUsers())
 });
 
+router.get('/admins', async function (req, res, next) {
+  res.send(await usersRepo.getAdmins())
+});
+
 router.get('/searchbyid/:id', async function (req, res) {
   res.send(await usersRepo.getUser(req.params.id))
 })
@@ -30,6 +34,17 @@ router.put('/', async function (req, res) {
   user.role = req.body.role
   user.updatedAt = moment().format('YYYY/MM/DD hh:mm:ss')
   res.send(await usersRepo.updateUser(user))
+})
+
+router.post('/', async function (req, res) {
+  let user = {};
+  user.username = req.body.username
+  user.email = req.body.email
+  user.password = req.body.password
+  user.role = "guest"
+  user.createdAt = moment().format('YYYY/MM/DD hh:mm:ss')
+  user.updatedAt = user.createdAt
+  res.send(await usersRepo.addUser(user));
 })
 
 module.exports = router;
