@@ -1,4 +1,6 @@
 const { User } = require('../models')
+const { Op } = require("sequelize");
+
 module.exports = {
     getAllUsers() {
         return User.findAll()
@@ -49,19 +51,21 @@ module.exports = {
         });
     },
 
-    async addUser(user) {
+    async addUser(user_data) {
         return await User.findOrCreate({
             where: {
                 [Op.or]: [
-                    { username: user.username },
-                    { email: user.email }
+                    { username: user_data.username },
+                    { email: user_data.email }
                 ]
             },
             defaults: {
-                password: user.password,
-                role: user.role,
-                createdAt: user.createdAt,
-                updatedAt: user.updatedAt
+                username: user_data.username,
+                email: user_data.email,
+                password: user_data.password,
+                role: user_data.role,
+                createdAt: user_data.createdAt,
+                updatedAt: user_data.updatedAt
             }
         });
     },
