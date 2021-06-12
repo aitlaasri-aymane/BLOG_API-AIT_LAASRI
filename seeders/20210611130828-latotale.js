@@ -77,6 +77,7 @@ module.exports = {
         {
           content: faker.lorem.lines(faker.datatype.number({ 'min': 1, 'max': 4 })),
           ArticleId: faker.random.arrayElement(JSON.parse(JSON.stringify(mfs_articles))).id,
+          UserId: faker.random.arrayElement(JSON.parse(JSON.stringify(mfs))).id,
           createdAt: new Date(),
           updatedAt: new Date()
         }
