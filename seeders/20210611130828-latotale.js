@@ -42,9 +42,9 @@ module.exports = {
     //console.log(faker.random.arrayElement(JSON.parse(JSON.stringify(mfs))).id);
 
     await queryInterface.bulkInsert('Articles',
-      [...Array(100)].map((Article) => (
+      [...Array(200)].map((Article) => (
         {
-          title: faker.name.title(),
+          title: faker.lorem.sentence(3, 3),
           content: faker.lorem.paragraphs(2),
           published: 1,
           UserId: faker.random.arrayElement(JSON.parse(JSON.stringify(mfs))).id,
@@ -73,11 +73,11 @@ module.exports = {
     //console.log(faker.random.arrayElement(JSON.parse(JSON.stringify(mfs_articles))).id);
 
     await queryInterface.bulkInsert('Comments',
-      [...Array(1000)].map((Comment) => (
+      [...Array(2000)].map((Comment) => (
         {
           content: faker.lorem.lines(faker.datatype.number({ 'min': 1, 'max': 4 })),
           ArticleId: faker.random.arrayElement(JSON.parse(JSON.stringify(mfs_articles))).id,
-          UserId: faker.random.arrayElement(JSON.parse(JSON.stringify(mfs))).id,
+          //UserId: faker.random.arrayElement(JSON.parse(JSON.stringify(mfs))).id,
           createdAt: new Date(),
           updatedAt: new Date()
         }

@@ -1,8 +1,42 @@
 body {
-  padding: 50px;
+  padding-top: 50px;
+  padding-left: 50px;
+  padding-right: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
   color: #00B7FF;
+}
+
+#main_footer {
+  margin-left: -50;
+  clear: both;
+  bottom: 0px;
+  position: relative;
+  left: 0;
+  bottom: 0;
+  width: 120%;
+  display: block;
+  height: auto;
+}
+
+.forum-item-title:link{
+  text-decoration: none;
+}
+.forum-item-title:hover{
+  text-decoration: underline;
+}
+
+
+.forum-post:hover{
+  transition: all ease 1s;
+  background-color: rgba(199, 199, 199, 0.281)!important;
+  box-shadow: #F1F1F1 0px 0px 20px 10px;
+}
+.forum-post{
+  transition: all ease 1s;
+}
+.forum-article-title{
+  text-decoration: none;
 }

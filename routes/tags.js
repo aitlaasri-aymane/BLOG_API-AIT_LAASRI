@@ -1,35 +1,32 @@
-var express = require('express');
-var router = express.Router();
-const tagsRepo = require('../repositories/tags')
-const moment = require('moment')
+const router = require('express').Router();
+const tagRepo = require('../repositories/tags')
 
 /* GET users listing. */
 router.get('/', async function (req, res, next) {
-    res.send(await tagsRepo.getAllTags())
+    console.log("done")
+    var usersList = res.send(await tagRepo.getAllTags())
 });
-
 router.get('/:id', async function (req, res, next) {
-    res.send(await tagsRepo.getTag(req.params.id));
+    res.send(await tagRepo.getTags(req.params.id));
 });
 
-router.post('/', async function (req, res) {
-    let tag = {};
+router.post('/', async function (req, res, next) {
+    let tag = {}
     tag.name = req.body.name
-    tag.createdAt = moment().format('YYYY/MM/DD hh:mm:ss')
-    tag.updatedAt = tag.createdAt
-    res.send(await tagsRepo.addTag(tag));
+    await tagRepo.addTags(tag);
+    res.redirect("/");
 });
 
-router.put('/', async function (req, res) {
-    let tag = {};
+router.put('/', async function (req, res, next) {
+    let tag = {}
     tag.name = req.body.name
-    tag.updatedAt = moment().format('YYYY/MM/DD hh:mm:ss')
-    res.send(await tagsRepo.updateTag(tag));
+    res.send(await tagRepo.updateTags(ustager));
 });
 
-router.delete('/deletetagbyid/:id', async function (req, res, next) {
-    try { res.status(await tagsRepo.deleteTag(req.params.id)) }
-    catch (err) { next(err); }
-});
+router.delete('/', async function (req, res, next) {
+    let tag = req.body.id
+    await tagRepo.deleteTags(tag);
+    res.redirect("/");
+})
 
 module.exports = router;

@@ -10,6 +10,82 @@
     crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
+<script>
+  let offset = 1;
+  let limit = 20;
+  let count;
+  let localPage = 1;
+  let lastpage = 0;
+  async function getArticles() {
+    let res = await fetch('http://localhost:3000/articles/count');
+    count = await res.status;
+    document.getElementById('count').innerHTML = "Total posts : " + count;
+    document.getElementById('homepageload').classList.add("d-none");
+    let response = await fetch('http://localhost:3000/articles/countComm');
+    data = await response.text()
+    let obj = JSON.parse(data);
+    let cpt = 1;
+
+    obj.map(item => {
+      if (cpt >= offset && cpt <= limit) {
+        document.getElementById('lstArticle').innerHTML += '<div align="left" class="row border-bottom border-3 forum-post" onclick="getArticleWithComm(' + item.id + ')"> <div class="forum-icon col-md-auto"> <i class="fas fa-folder-open fa-3x"></i> </div> <div class="col border-end"> <h6> <a href="#" class="forum-item-title text-body" onclick="getArticleWithComm(' + item.id + ')">' + item.title + '</a></h6> <div class="forum-sub-title text-muted">' + item.content + '</div> </div> <div align="center" class="col-md-auto forum-info align-self-center"> <span class="views-number"> <i class="fas fa-comments"></i> ' + item.NbrComments + ' </span> <div> <small>Comments</small> </div> </div>  </div>';
+
+      }
+      cpt++;
+    })
+    let nbPage = count / 20;
+
+    document.getElementById('padding').innerHTML += '<ul class="pagination"><li id="padback" class="page-item" onclick="setpage(' + (localPage - 1) + ')"><span class="page-link has-icon"><i class="material-icons">&laquo; Previous</i></span></li>'
+
+    for (let i = 1; i <= nbPage; i++) {
+      document.getElementById('padding').innerHTML += '<li class="page-item" id="pad' + i + '"onclick="setpage(' + i + ')" ><a class="page-link" href="javascript:void(0)">' + i + '</a></li>'
+    }
+
+    document.getElementById('padding').innerHTML += '<li id="padnext" class="page-item"><a class="page-link has-icon" onclick="setpage(' + (localPage + 1) + ')" ><i class="material-icons">Next &raquo;</i></a></li></ul >'
+
+    colorlocalpad();
+  }
+  function setpage(page) {
+    let nbPage = count / 20;
+    if (page < 1) { document.getElementById('padback').classList.add("disabled"); return; }
+    if (page > nbPage) { document.getElementById('padnext').classList.add("disabled"); return; }
+    lastpage = localPage;
+    localPage = page;
+    offset = ((page - 1) * 20) + 1;
+    limit = (page * 20);
+    document.getElementById('count').innerHTML = 'Total posts : <div class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></div>';
+    document.getElementById('lstArticle').innerHTML = '<div id="homepageload" align="center"><strong>Loading...</strong><div class="spinner-border" role="status" aria-hidden="true"></div></div>';
+    document.getElementById('padding').innerHTML = '';
+    getArticles();
+  }
+  function colorlocalpad() {
+    console.log(localPage, lastpage);
+    document.getElementById('pad' + localPage).classList.add("active");
+    if (lastpage != 0) { document.getElementById('pad' + lastpage).classList.remove("active"); }
+  }
+  async function getArticleWithComm(id) {
+    let response = await fetch('http://localhost:3000/articles/' + id);
+    let data = await response.text()
+    let obj = JSON.parse(data);
+    console.log(obj);
+    document.getElementById('lstArticle').innerHTML = '<button type="button" class="btn btn-outline-secondary forum-item-title mb-5" onclick="setpage(' + localPage + ')"> << Back</button>'
+    window.scrollTo(0, 0);
+    document.getElementById('padding').innerHTML = '';
+    obj.map(item => {
+      document.getElementById('lstArticle').innerHTML += '<div class="row mb-3"> <div class="forum-icon col-md-auto align-self-center"> <i class="fas fa-folder-open fa-2x"></i> </div> <a class="forum-article-title fs-2 text-dark fw-bolder col">' + item.title + '</a> </div> <div class="forum-sub-title mb-5">' + item.content + '</div> <hr>';
+
+    })
+    response = await fetch('http://localhost:3000/articles/' + id + '/comments');
+    data = await response.text()
+    obj = JSON.parse(data);
+    console.log(obj);
+    document.getElementById('lstArticle').innerHTML += '<h4 class="mb-5"> <i class="fas fa-comments fa-1x"></i> Comments </h4> ';
+    obj.map(item => {
+      document.getElementById('lstArticle').innerHTML += '<div class="row border-bottom"> <div class="forum-icon col-md-auto align-self-center"> <i class="fa fa-comment"></i> </div> <div class="forum-sub-title col">' + item.content + ' </div></div><br>';
+
+    })
+  }
+</script>
 
 
 
@@ -68,10 +144,45 @@
 
   <div class="tab-content">
 
-    <div class="tab-pane fade show active text-center mt-5" id="homebody" role="tabpanel" aria-labelledby="home">
-      <strong>Loading...</strong>
-      <div class="spinner-border" role="status" aria-hidden="true"></div>
+    <div align="center" class="tab-pane fade show active text-center m-5" id="homebody" role="tabpanel"
+      aria-labelledby="home">
+
+      <div class="container justify-content-md-center row">
+        <div class="col-md-auto align-self-center"><i class="col fas fa-blog fa-4x"></i>
+        </div>
+        <div class="col-md-auto">
+          <h1 align="center">Welcome to my Blog!</h1>
+          <small class="text-center text-muted">This blog was made by Aymane Ait Laasri!</small>
+        </div>
+      </div>
+      <hr>
+
+      <div class="ibox-content forum-container" align="left">
+
+        <div class="forum-title">
+          <h3>General subjects</h3>
+          <div align="right" class="pull-right forum-desc mb-5">
+            <i class="text-black-50 fas fa-clone fa-sm"></i>
+            <samll class="text-black-50" id="count">Total posts : <div class="spinner-grow spinner-grow-sm"
+                role="status" aria-hidden="true">
+              </div>
+            </samll>
+          </div>
+        </div>
+
+        <div id="lstArticle" class="forum-item active">
+          <div id="homepageload" align="center">
+            <strong>Loading...</strong>
+            <div class="spinner-border" role="status" aria-hidden="true"></div>
+          </div>
+          <script> getArticles();</script>
+        </div>
+        <div id="padding" class="pagination pagination-circle justify-content-center mt-5">
+        </div>
+      </div>
+
     </div>
+
 
     <div class="card tab-pane fade text-center mt-5" id="CPbody" role="tabpanel" aria-labelledby="displayCP">
       </nav>
@@ -333,8 +444,13 @@
 
 
 
-
 </body>
+
+<footer class="background" id="main_footer"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+    <path fill="#f3f4f5" fill-opacity="1"
+      d="M0,288L40,288C80,288,160,288,240,250.7C320,213,400,139,480,138.7C560,139,640,213,720,224C800,235,880,181,960,144C1040,107,1120,85,1200,80C1280,75,1360,85,1400,90.7L1440,96L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z">
+    </path>
+  </svg></footer>
 
 <script>
   const URL = 'http://localhost:3000/users/';

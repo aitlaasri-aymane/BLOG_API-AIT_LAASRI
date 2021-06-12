@@ -1,49 +1,49 @@
-var express = require('express');
-var router = express.Router();
+const router = require('express').Router();
+const commsRepo = require('../repositories/comments')
 const articleRepo = require('../repositories/articles')
-const commentsRepo = require('../repositories/comments')
-const moment = require('moment')
 
 /* GET users listing. */
 router.get('/', async function (req, res, next) {
-    res.send(await articleRepo.getAllArticles())
+    res.send(await articleRepo.getArticles())
 });
 
 router.get('/count', async function (req, res, next) {
-    res.sendStatus(await articleRepo.countArticles());
+    res.sendStatus(await articleRepo.countarticle());
+});
+
+router.get('/countComm', async function (req, res, next) {
+    res.send(await commsRepo.countComments());
 });
 
 router.get('/:id', async function (req, res, next) {
-    res.send(await articleRepo.getArticle(req.params.id));
+    res.send(await articleRepo.getArticlesById(req.params.id));
 });
 
 router.get('/:id/comments', async function (req, res, next) {
-    res.send(await commentsRepo.getArticleComments(req.params.id));
+    res.send(await commsRepo.getArticleComments(req.params.id));
 });
 
-router.post('/', async function (req, res) {
-    let article = {};
+router.post('/', async function (req, res, next) {
+    let article = {}
     article.title = req.body.title
     article.content = req.body.content
     article.UserId = req.body.UserId
-    article.published = 1
-    article.createdAt = moment().format('YYYY/MM/DD hh:mm:ss')
-    article.updatedAt = article.createdAt
-    res.send(await articleRepo.addArticle(article));
+    await articleRepo.addArticle(article);
+    res.redirect("/");
 });
 
-router.put('/', async function (req, res) {
-    let article = {};
+router.put('/', async function (req, res, next) {
+    let article = {}
     article.title = req.body.title
     article.content = req.body.content
-    article.published = req.body.published
-    article.updatedAt = moment().format('YYYY/MM/DD hh:mm:ss')
-    res.send(await articleRepo.updateArticle(article));
+    article.UserId = req.body.UserId
+    res.send(await articleRepo.updateArticle(user));
 });
 
-router.delete('/deletearticlebyid/:id', async function (req, res, next) {
-    try { res.status(await articleRepo.deleteArticle(req.params.id)) }
-    catch (err) { next(err); }
-});
+router.delete('/', async function (req, res, next) {
+    let article = req.body.id
+    await articleRepo.deleteArticle(article);
+    res.redirect("/");
+})
 
 module.exports = router;

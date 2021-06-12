@@ -1,54 +1,80 @@
 const { Comment } = require('../models')
+const { Article } = require('../models')
+var sequelize = require('sequelize');
 
 module.exports = {
     getAllComments() {
-        return Comment.findAll()
+        return Article.findAll({
+            group: ['Article.id'],
+            attributes: ['title', [sequelize.fn('COUNT', 'Comments.id'), 'NbrComments']],
+            include: { model: Comment, attributes: [] }
+        });
+    },
+    countComments() {
+        return Article.findAll({
+            group: ['Article.id'],
+            attributes: ['id', 'title', 'content', 'createdAt', [sequelize.fn('COUNT', 'Comments.id'), 'NbrComments']],
+            include: { model: Comment, attributes: [] }
+        });
+    },
+    getComments(offset = 0, limit = 10) {
+        return Comment.findAll({ offset: offset, limit: limit })
     },
 
-    // méthodes à implémenter
-    async getComments(offset = 0, limit = 10) {
-        return await Comment.findAll({ offset: offset, limit: limit });
-    },
-
-    async getArticleComments(id_article) {
-        return await Comment.findAndCountAll({
+    async countArticle(ida) {
+        return await Comment.count({
             where: {
-                ArticleId: id_article
+                id: ida
             }
         });
     },
+    getComments(id) {
+        var x = Comment.findAll({
+            where: {
+                id: id
+            }
+        });
+        return x
+    },
+    getArticleComments(id) {
+        var x = Comment.findAll({
+            where: {
+                ArticleId: id
+            }
+        });
+        return x
+    },
 
-    async getComment(id) {
-        return await Comment.findOne({
+    getPostComments(id) {
+        var x = Comment.findAll({
+            where: {
+                ArticleId: id
+            }
+        });
+        return x
+    },
+
+
+    async addComments(Comments) {
+        await Comment.create(Tags);
+    },
+
+
+    async updateComments(id, Comments) {
+        await Comment.update(Tags, {
             where: {
                 id: id
             }
         });
     },
 
-    async addComment(com_data) {
-        return await Comment.create({
-            content: com_data.name,
-            ArticleId: com_data.ArticleId,
-            createdAt: com_data.createdAt,
-            updatedAt: com_data.updatedAt
-        });
-    },
 
-    async updateComment(data) {
-        return await Comment.update(data, {
-            where: {
-                id: data.id
-            }
-        });
-    },
-
-    async deleteComment(id) {
-        return await Comment.destroy({
+    async deleteComments(id) {
+        await Comment.destroy({
             where: {
                 id: id
             }
-        })
+        });
     },
     // D'autres méthodes jugées utiles
 }
